@@ -20,9 +20,8 @@ public class NewordleService {
      * Currently hardcoded the value
      * Has to be set as a random generator as a cron job
      */
-    public String setDailyWord(String word) {
+    public void setDailyWord(String word) {
         this.dailyWord = "madam";
-        return dailyWord;
     }
 
     /*
