@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("")
 @RestController
 public class Controller {
+    NewordleService service = new NewordleService();
 
     @GetMapping("/healthcheck/{pathParam}")
     public String healthCheck(@RequestBody String parameterCheck, @RequestParam int queryParam,
@@ -21,7 +22,22 @@ public class Controller {
     }
 
     @GetMapping("/newordle")
-    public int[] healthCheck(@RequestParam String queryParam) {
-        return NewordleService.getRes(queryParam);
+    public String newordle(@RequestParam String queryParam) {
+        if (!service.validateEnteredWord(queryParam)) {
+            return "Invalid Word!";
+        }
+        int[] res = service.getResult(queryParam);
+        String ret = "";
+        for (int i = 0; i < 5; i++) {
+            if (res[i] == 0) {
+                ret = ret + " Grey ";
+            } else if (res[i] == 1) {
+                ret = ret + " Yellow ";
+            } else {
+                ret = ret + " Green ";
+            }
+        }
+        return ret;
+
     }
 }
