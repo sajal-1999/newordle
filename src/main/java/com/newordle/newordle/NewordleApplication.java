@@ -8,7 +8,7 @@ public class NewordleApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(NewordleApplication.class, args);
-		System.out.println("Let the games begin!");
+		System.out.println("Let the game begin!");
 	}
 
 }
