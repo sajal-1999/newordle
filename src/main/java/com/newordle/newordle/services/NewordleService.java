@@ -1,11 +1,15 @@
 package com.newordle.newordle.services;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.*;
 
 public class NewordleService {
     String dailyWord = "madam";
     static Map<Character, List<Integer>> dailyMap = new HashMap<>();
 
+    // NewordleService() empty constructor to create a char map for the daily word
     public NewordleService() {
         for (int i = 0; i < 5; i++) {
             char c = this.dailyWord.charAt(i);
@@ -20,19 +24,29 @@ public class NewordleService {
      * Currently hardcoded the value
      * Has to be set as a random generator as a cron job
      */
-    public void setDailyWord(String word) {
+    public void setDailyWord() {
         this.dailyWord = "madam";
     }
 
-    /*
-     * Placeholder function to validate the entered word
-     */
+    // validateEnteredWord checks if the entered word is actually a word or not
     public Boolean validateEnteredWord(String enteredWord) {
-        if (enteredWord.equals(this.dailyWord)) {
-            return true;
-        } else {
-            return false;
+        try {
+            ClassLoader classLoader = this.getClass().getClassLoader();
+            File wordFile = new File(classLoader.getResource("static/Words.txt").getFile());
+            Scanner scanner = new Scanner(wordFile);
+            String word;
+            while (scanner.hasNextLine()) {
+                word = scanner.nextLine().strip().toLowerCase();
+                if (word.equalsIgnoreCase(enteredWord)) {
+                    scanner.close();
+                    return true;
+                }
+            }
+            scanner.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
+        return false;
     }
 
     // 0-grey, 1-yellow, 2-green

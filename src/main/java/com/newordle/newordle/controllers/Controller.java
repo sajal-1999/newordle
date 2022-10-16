@@ -15,12 +15,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class Controller {
     NewordleService service = new NewordleService();
 
+    // curl-X GET
+    // localhost:8080/healthcheck/ABC?queryParam=4-H'Content-type:application/json'
+    // -d"Hello
     @GetMapping("/healthcheck/{pathParam}")
     public String healthCheck(@RequestBody String parameterCheck, @RequestParam int queryParam,
             @PathVariable String pathParam) {
+        service.setDailyWord();
         return parameterCheck + pathParam + queryParam;
     }
 
+    // curl-X GET localhost:8080/newordle?queryParam=madam
     @GetMapping("/newordle")
     public String newordle(@RequestParam String queryParam) {
         if (!service.validateEnteredWord(queryParam)) {
@@ -30,11 +35,11 @@ public class Controller {
         String ret = "";
         for (int i = 0; i < 5; i++) {
             if (res[i] == 0) {
-                ret = ret + " Grey ";
+                ret = ret + "Grey";
             } else if (res[i] == 1) {
-                ret = ret + " Yellow ";
+                ret = ret + "Yellow";
             } else {
-                ret = ret + " Green ";
+                ret = ret + "Green";
             }
         }
         return ret;
