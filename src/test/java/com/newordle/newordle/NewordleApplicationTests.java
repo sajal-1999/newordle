@@ -13,6 +13,6 @@ class NewordleApplicationTests {
 	void contextLoads() {
 		Controller controller = new Controller();
 		assertEquals("GreenGreenGreenGreenGreen", controller.newordle("madam"));
-		assertEquals("Invalid Word!", controller.newordle("mamma"));
+		assertEquals("GreenGreenYellowGreyYellow", controller.newordle("mamma"));
 	}
 }
