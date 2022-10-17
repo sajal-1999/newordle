@@ -3,7 +3,11 @@ package com.newordle.newordle.services;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
+import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public class NewordleService {
     String dailyWord = "madam";
     static Map<Character, List<Integer>> dailyMap = new HashMap<>();
@@ -12,9 +16,10 @@ public class NewordleService {
     public NewordleService() {
         for (int i = 0; i < 5; i++) {
             char c = this.dailyWord.charAt(i);
-            if (!NewordleService.dailyMap.containsKey(c))
-                NewordleService.dailyMap.put(c, new ArrayList<>());
-            NewordleService.dailyMap.get(c).add(i);
+            if (!dailyMap.containsKey(c)) {
+                dailyMap.put(c, new ArrayList<>());
+            }
+            dailyMap.get(c).add(i);
         }
     }
 
@@ -51,7 +56,10 @@ public class NewordleService {
     // 0-grey, 1-yellow, 2-green
     public int[] getResult(String entered) {
         Map<Character, List<Integer>> dailyMapCopy = new HashMap<>();
-        dailyMapCopy.putAll(NewordleService.dailyMap);
+        dailyMapCopy = dailyMap
+                .entrySet()
+                .stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, valueMapper -> new ArrayList<>(valueMapper.getValue())));
 
         int[] res = new int[5];
         for (int i = 0; i < 5; i++) {
