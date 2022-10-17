@@ -11,15 +11,33 @@ import org.springframework.stereotype.Service;
 public class NewordleService {
     String dailyWord = "madam";
     static Map<Character, List<Integer>> dailyMap = new HashMap<>();
+    static Set<String> wordSet = new HashSet<>();
 
     // NewordleService() empty constructor to create a char map for the daily word
     public NewordleService() {
+
+        // Creating char map for dailyWord
         for (int i = 0; i < 5; i++) {
             char c = this.dailyWord.charAt(i);
             if (!dailyMap.containsKey(c)) {
                 dailyMap.put(c, new ArrayList<>());
             }
             dailyMap.get(c).add(i);
+        }
+
+        // Creating HashSet for list of words
+        try {
+            ClassLoader classLoader = this.getClass().getClassLoader();
+            File wordFile = new File(classLoader.getResource("static/Words.txt").getFile());
+            Scanner scanner = new Scanner(wordFile);
+            String word;
+            while (scanner.hasNextLine()) {
+                word = scanner.nextLine().strip().toLowerCase();
+                wordSet.add(word);
+            }
+            scanner.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
@@ -34,21 +52,8 @@ public class NewordleService {
 
     // validateEnteredWord checks if the entered word is actually a word or not
     public Boolean validateEnteredWord(String enteredWord) {
-        try {
-            ClassLoader classLoader = this.getClass().getClassLoader();
-            File wordFile = new File(classLoader.getResource("static/Words.txt").getFile());
-            Scanner scanner = new Scanner(wordFile);
-            String word;
-            while (scanner.hasNextLine()) {
-                word = scanner.nextLine().strip().toLowerCase();
-                if (word.equalsIgnoreCase(enteredWord)) {
-                    scanner.close();
-                    return true;
-                }
-            }
-            scanner.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+        if (wordSet.contains(enteredWord)) {
+            return true;
         }
         return false;
     }
