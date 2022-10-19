@@ -9,45 +9,84 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class NewordleService {
-    String dailyWord = "madam";
+    static String dailyWord;
     static Map<Character, List<Integer>> dailyMap = new HashMap<>();
     static Set<String> wordSet = new HashSet<>();
+    static Set<Integer> wordsUsedIndices = new HashSet<>();
 
     // NewordleService() empty constructor to create a char map for the daily word
     public NewordleService() {
-
+        // Creating HashSet for indices of words used so far
+        try {
+            ClassLoader classLoader = this.getClass().getClassLoader();
+            File dailyWordFile = new File(classLoader.getResource("DailyWordsIndices.txt").getFile());
+            Scanner dailyWordFileScanner = new Scanner(dailyWordFile);
+            String word;
+            while (dailyWordFileScanner.hasNextLine()) {
+                word = dailyWordFileScanner.nextLine().strip().toLowerCase();
+                wordsUsedIndices.add(Integer.valueOf(word));
+            }
+            dailyWordFileScanner.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        // Creating HashSet for list of words
+        try {
+            ClassLoader classLoader = this.getClass().getClassLoader();
+            File wordFile = new File(classLoader.getResource("static/Words.txt").getFile());
+            Scanner wordFileScanner = new Scanner(wordFile);
+            String word;
+            while (wordFileScanner.hasNextLine()) {
+                word = wordFileScanner.nextLine().strip().toLowerCase();
+                wordSet.add(word);
+            }
+            wordFileScanner.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        setDailyWord();
         // Creating char map for dailyWord
         for (int i = 0; i < 5; i++) {
-            char c = this.dailyWord.charAt(i);
+            char c = dailyWord.charAt(i);
             if (!dailyMap.containsKey(c)) {
                 dailyMap.put(c, new ArrayList<>());
             }
             dailyMap.get(c).add(i);
         }
 
-        // Creating HashSet for list of words
-        try {
-            ClassLoader classLoader = this.getClass().getClassLoader();
-            File wordFile = new File(classLoader.getResource("static/Words.txt").getFile());
-            Scanner scanner = new Scanner(wordFile);
-            String word;
-            while (scanner.hasNextLine()) {
-                word = scanner.nextLine().strip().toLowerCase();
-                wordSet.add(word);
-            }
-            scanner.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
     }
 
     /*
      * Method to generate and set the daily word
-     * Currently hardcoded the value
-     * Has to be set as a random generator as a cron job
+     * Has to be set as a cron job
      */
     public void setDailyWord() {
-        this.dailyWord = "madam";
+        Random rand = new Random();
+        try {
+            ClassLoader classLoader = this.getClass().getClassLoader();
+            File wordFile = new File(classLoader.getResource("static/Words.txt").getFile());
+            Scanner wordFileScanner = new Scanner(wordFile);
+            String word;
+            int i = 0;
+            int dailyWordIndex = rand.nextInt(5757);
+            // Creating random till new word found
+            while (wordsUsedIndices.contains(dailyWordIndex)) {
+                dailyWordIndex = rand.nextInt(5757);
+            }
+
+            // Get today's word
+            while (wordFileScanner.hasNextLine()) {
+                i++;
+                word = wordFileScanner.nextLine().strip().toLowerCase();
+                if (i == dailyWordIndex) {
+                    dailyWord = word;
+                }
+            }
+            System.out.println(dailyWord + " " + dailyWordIndex + "\n=====================");
+            wordFileScanner.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     // validateEnteredWord checks if the entered word is actually a word or not
@@ -68,7 +107,7 @@ public class NewordleService {
 
         int[] res = new int[5];
         for (int i = 0; i < 5; i++) {
-            char c = this.dailyWord.charAt(i);
+            char c = dailyWord.charAt(i);
             if (c == entered.charAt(i)) {
                 res[i] = 2;
                 dailyMapCopy.get(c).remove(Integer.valueOf(i));
