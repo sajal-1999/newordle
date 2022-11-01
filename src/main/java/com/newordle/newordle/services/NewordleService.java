@@ -5,7 +5,17 @@ import java.io.FileNotFoundException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import org.bson.Document;
+import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
+
+import com.mongodb.ConnectionString;
+import com.mongodb.MongoException;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.result.InsertOneResult;
 
 @Service
 public class NewordleService {
@@ -16,20 +26,6 @@ public class NewordleService {
 
     // NewordleService() empty constructor to create a char map for the daily word
     public NewordleService() {
-        // Creating HashSet for indices of words used so far
-        try {
-            ClassLoader classLoader = this.getClass().getClassLoader();
-            File dailyWordFile = new File(classLoader.getResource("DailyWordsIndices.txt").getFile());
-            Scanner dailyWordFileScanner = new Scanner(dailyWordFile);
-            String word;
-            while (dailyWordFileScanner.hasNextLine()) {
-                word = dailyWordFileScanner.nextLine().strip().toLowerCase();
-                wordsUsedIndices.add(Integer.valueOf(word));
-            }
-            dailyWordFileScanner.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
         // Creating HashSet for list of words
         try {
             ClassLoader classLoader = this.getClass().getClassLoader();
@@ -73,8 +69,6 @@ public class NewordleService {
             while (wordsUsedIndices.contains(dailyWordIndex)) {
                 dailyWordIndex = rand.nextInt(5757);
             }
-
-            // Get today's word
             while (wordFileScanner.hasNextLine()) {
                 i++;
                 word = wordFileScanner.nextLine().strip().toLowerCase();
@@ -82,6 +76,7 @@ public class NewordleService {
                     dailyWord = word;
                 }
             }
+            System.out.println("\n\n============XXXXX=============\n\n");
             System.out.println(dailyWord + " " + dailyWordIndex + "\n=====================");
             wordFileScanner.close();
         } catch (FileNotFoundException e) {
@@ -130,5 +125,40 @@ public class NewordleService {
             }
         }
         return res;
+    }
+
+    public void updateMongoCollection() {
+        try {
+            ClassLoader classLoader = this.getClass().getClassLoader();
+            File wordFile = new File(classLoader.getResource("static/Words.txt").getFile());
+            Scanner wordFileScanner = new Scanner(wordFile);
+            ConnectionString connectionString = new ConnectionString(
+                    "mongodb+srv://newordleadmin:ZygRC0kwQ17PiZRp@newordle.a043wfu.mongodb.net/?retryWrites=true&w=majority");
+            try {
+                MongoClient mongoClient = MongoClients.create(connectionString);
+                MongoDatabase database = mongoClient.getDatabase("newordle");
+                MongoCollection<Document> collection = database.getCollection("words");
+                String word;
+                int i = 0;
+                while (wordFileScanner.hasNextLine()) {
+                    i++;
+                    word = wordFileScanner.nextLine().strip().toLowerCase();
+                    try {
+                        InsertOneResult result = collection.insertOne(new Document()
+                                .append("_id", new ObjectId())
+                                .append("index", i)
+                                .append("word", word));
+                        System.out.println("Success! Inserted document id: " + result.getInsertedId());
+                    } catch (MongoException me) {
+                        System.err.println("Unable to insert due to an error: " + me);
+                    }
+                }
+                wordFileScanner.close();
+            } catch (MongoException mException) {
+                System.out.println(mException);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }

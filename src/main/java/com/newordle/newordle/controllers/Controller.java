@@ -28,6 +28,12 @@ public class Controller {
         return parameterCheck + pathParam + queryParam;
     }
 
+    @GetMapping("/updateMongoCollection")
+    public String updateMongoCollection() {
+        service.updateMongoCollection();
+        return "Ran success";
+    }
+
     // curl-X GET localhost:8080/newordle?queryParam=madam
     @GetMapping("/newordle")
     public String newordle(@RequestParam String queryParam) {
