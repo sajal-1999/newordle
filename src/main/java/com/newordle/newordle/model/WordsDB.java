@@ -1,18 +1,23 @@
 package com.newordle.newordle.model;
 
-// import org.springframework.data.mongodb.core.mapping.Document;
+public class WordsDb {
 
-public class WordsDB {
-    // @Document("WordsDB")
-    private int index;
+    private int _id;
     private String word;
+    private boolean used;
 
-    public int getIndex() {
-        return this.index;
+    public WordsDb(int _id, String word, boolean used) {
+        this._id = _id;
+        this.word = word;
+        this.used = used;
     }
 
-    public void setIndex(int index) {
-        this.index = index;
+    public int getID() {
+        return this._id;
+    }
+
+    public void setID(int _id) {
+        this._id = _id;
     }
 
     public String getWord() {
@@ -23,4 +28,11 @@ public class WordsDB {
         this.word = word;
     }
 
+    public boolean getUsedStatus() {
+        return this.used;
+    }
+
+    public void setUsedStatus(boolean used) {
+        this.used = used;
+    }
 }
