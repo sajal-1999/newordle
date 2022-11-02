@@ -76,15 +76,13 @@ public class WordsDao {
     }
 
     // getAllWords returns set of all words from the DB
-    public Set getAllWords() {
+    public Set<String> getAllWords() {
         try {
             MongoCollection<Document> collection = getDbCollection();
             FindIterable<Document> iterDocs = collection.find();
             MongoCursor<Document> cursor = iterDocs.iterator();
-            int i = 0;
             Set<String> wordSet = new HashSet<>();
             while (cursor.hasNext()) {
-                i++;
                 wordSet.add((String) cursor.next().get("word"));
             }
             return wordSet;
@@ -106,7 +104,6 @@ public class WordsDao {
                 System.err.println("Failed to update status!");
                 return;
             }
-            System.out.println(findWordById(_id));
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
