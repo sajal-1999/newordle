@@ -102,7 +102,6 @@ public class WordsDao {
             Document foundWordDoc = collection.findOneAndUpdate(Filters.eq("_id", _id), update);
             if (foundWordDoc == null) {
                 System.err.println("Failed to update status!");
-                return;
             }
         } catch (Exception e) {
             e.printStackTrace();
