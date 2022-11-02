@@ -77,21 +77,21 @@ public class WordsDao {
 
     // getAllWords returns set of all words from the DB
     public Set<String> getAllWords() {
+        Set<String> wordSet = null;
         try {
             MongoCollection<Document> collection = getDbCollection();
             FindIterable<Document> iterDocs = collection.find();
             MongoCursor<Document> cursor = iterDocs.iterator();
-            Set<String> wordSet = new HashSet<>();
+            wordSet = new HashSet<>();
             while (cursor.hasNext()) {
                 wordSet.add((String) cursor.next().get("word"));
             }
-            return wordSet;
         } catch (Exception e) {
             System.out.println("Error fetching words!");
-            return null;
         } finally {
             terminateConnection();
         }
+        return wordSet;
     }
 
     // setUsed sets the daily word's used status to true
