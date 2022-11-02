@@ -28,6 +28,7 @@ public class Controller {
         return parameterCheck + pathParam + queryParam;
     }
 
+    // sample endpoint for first load of words to mongodb. to be deprecated.
     @GetMapping("/updateMongoCollection")
     public String updateMongoCollection() {
         service.updateMongoCollection();
