@@ -58,7 +58,7 @@ public class WordsDao {
         mongoClient.close();
     }
 
-    // findWord returns the document corresponding to the _id passed as POJO. TBI
+    // findWord returns the document corresponding to the _id passed as POJO
     public WordsDb findWordById(int _id) {
         try {
             MongoCollection<Document> collection = getDbCollection();
