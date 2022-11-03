@@ -54,4 +54,11 @@ public class Controller {
         }
         return ret;
     }
+
+    // sample api to check frontend
+    @GetMapping("/frontend")
+    public String frontend() {
+        // service.setDailyWord();
+        return "Set Success";
+    }
 }
