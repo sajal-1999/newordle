@@ -2,6 +2,7 @@ package com.newordle.newordle.controllers;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import com.newordle.newordle.dao.WordsDao;
 import com.newordle.newordle.services.NewordleService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +30,9 @@ public class Controller {
     }
 
     // sample endpoint for first load of words to mongodb. to be deprecated.
-    @GetMapping("/updateMongoCollection")
-    public String updateMongoCollection() {
-        service.updateMongoCollection();
+    @GetMapping("/insertAllWords")
+    public String insertAllWords() {
+        service.insertAllWords();
         return "Ran success";
     }
 
@@ -53,6 +54,12 @@ public class Controller {
             }
         }
         return ret;
+    }
+
+    // API to insert one new word
+    @GetMapping("/insertWord")
+    public String insertWord(@RequestParam String word) {
+        return service.insertOneWord(word);
     }
 
     // sample api to check frontend

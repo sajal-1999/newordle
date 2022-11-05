@@ -15,6 +15,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.result.InsertOneResult;
 import com.newordle.newordle.model.WordsDb;
 import org.bson.conversions.Bson;
 import static com.mongodb.client.model.Updates.*;
@@ -108,5 +109,42 @@ public class WordsDao {
         } finally {
             terminateConnection();
         }
+    }
+
+    // insertOneWord sets the daily word's used status to true
+    public String insertOneWord(String word) {
+        String ret = "";
+        try {
+            MongoCollection<Document> collection = getDbCollection();
+            try {
+                InsertOneResult result = collection.insertOne(new Document()
+                        .append("_id", getWordCount() + 1)
+                        .append("used", false)
+                        .append("word", word));
+                System.out.println("Success! Inserted document id: " + result.getInsertedId());
+            } catch (MongoException me) {
+                System.err.println("Unable to insert due to an error: " + me);
+                ret = "Error Inserting";
+            }
+            ret = "Insertion successful";
+        } catch (Exception e) {
+            ret = "Error Inserting";
+            e.printStackTrace();
+        } finally {
+            terminateConnection();
+        }
+        return ret;
+    }
+
+    // getWordCount sets the daily word's used status to true
+    public int getWordCount() {
+        int wordCount = -1;
+        try {
+            MongoCollection<Document> collection = getDbCollection();
+            wordCount = (int) collection.countDocuments();
+        } catch (MongoException me) {
+            System.err.println("Unable to insert due to an error: " + me);
+        }
+        return wordCount;
     }
 }
