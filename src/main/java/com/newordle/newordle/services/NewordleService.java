@@ -47,18 +47,14 @@ public class NewordleService {
      */
     public void setDailyWord() {
         Random rand = new Random();
-        int wordCount = wordsDao.getWordCount();
-        int dailyWordIndex = rand.nextInt(wordCount);
-
+        int dailyWordIndex = rand.nextInt(5757);
         WordsDb wordObj;
         wordObj = wordsDao.findWordById(dailyWordIndex);
-
         // Creating random till new word found
         while (wordObj.getUsedStatus()) {
-            dailyWordIndex = rand.nextInt(wordCount);
+            dailyWordIndex = rand.nextInt(5757);
             wordObj = wordsDao.findWordById(dailyWordIndex);
         }
-
         dailyWord = wordObj.getWord();
         wordsDao.setUsed(dailyWordIndex);
         System.out.println("\n\n============XXXXX=============\n\n");
@@ -109,12 +105,14 @@ public class NewordleService {
         return res;
     }
 
-    // insertAllWords adds words for first time to mongoDB collection
-    public void insertAllWords() {
+    // updateMongoCollection adds words for first time to mongoDB collection
+    public void updateMongoCollection() {
         try {
             ClassLoader classLoader = this.getClass().getClassLoader();
             File wordFile = new File(classLoader.getResource("static/Words.txt").getFile());
             Scanner wordFileScanner = new Scanner(wordFile);
+            // System.out.println(wordsDao.findWordById(1));
+            // System.out.println(wordsDao.getAllWords());
             MongoCollection<Document> collection = wordsDao.getDbCollection();
             if (collection == null) {
                 System.out.println("Failed to insert!");
@@ -124,17 +122,13 @@ public class NewordleService {
             System.out.println(collection.countDocuments());
 
             String word;
-            int i = wordsDao.getWordCount();
+            int i = 0;
             Document doc;
             while (wordFileScanner.hasNextLine()) {
-                word = wordFileScanner.nextLine().strip().toLowerCase();
-                if (wordSet.contains(word)) {
-                    continue;
-                }
                 i++;
+                word = wordFileScanner.nextLine().strip().toLowerCase();
                 try {
-                    doc = new Document()
-                            .append("_id", i)
+                    doc = new Document().append("_id", i)
                             .append("used", false)
                             .append("word", word);
                     InsertOneResult result = collection.insertOne(doc);
@@ -151,23 +145,5 @@ public class NewordleService {
         } finally {
             wordsDao.terminateConnection();
         }
-    }
-
-    // insertOneWord is used to add a new word to the db
-    public String insertOneWord(String word) {
-        word = word.strip().toLowerCase();
-        if (word.length() != 5) {
-            return "Word Length not 5";
-        }
-        wordSet = wordsDao.getAllWords();
-        if (wordSet.contains(word)) {
-            return "Word already in the DB";
-        }
-        String insert = wordsDao.insertOneWord(word);
-        if (insert == "Error Inserting") {
-            return "Error Inserting";
-        }
-        return "Successfully Inserted word - " + word;
-
     }
 }
