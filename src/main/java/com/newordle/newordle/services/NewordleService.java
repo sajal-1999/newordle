@@ -89,9 +89,11 @@ public class NewordleService {
         }
         // int a = enteredWordMap.get('a').stream().map().collect(Collectors.toList());
 
-        // dailyMap contains all non green character positions only
-        // res contains all green characters
-        // now computing yellow and grey
+        /*
+         * dailyMap contains all non green character positions only
+         * res contains all green characters
+         * now computing yellow and grey
+         */
         for (int i = 0; i < 5; i++) {
             if (res[i] == 0) {
                 char c = enteredWord.charAt(i);
