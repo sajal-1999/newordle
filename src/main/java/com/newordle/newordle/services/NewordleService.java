@@ -139,14 +139,17 @@ public class NewordleService {
         if (word.length() != 5) {
             return "Word Length not 5";
         }
+
         wordSet = wordsDao.getAllWords();
         if (wordSet.contains(word)) {
             return "Word already in the DB";
         }
+
         String insert = wordsDao.insertOneWord(word);
         if (insert == "Error Inserting") {
             return "Error Inserting";
         }
+
         wordSet.add(word);
         return "Successfully Inserted word - " + word;
 
