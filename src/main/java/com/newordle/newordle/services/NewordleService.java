@@ -5,11 +5,14 @@ import java.io.FileNotFoundException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.newordle.newordle.dao.WordsDao;
 import com.newordle.newordle.model.WordsDb;
 
+@EnableScheduling
 @Service
 public class NewordleService {
     static String dailyWord;
@@ -37,10 +40,8 @@ public class NewordleService {
 
     }
 
-    /*
-     * Method to generate and set the daily word
-     * Has to be set as a cron job
-     */
+    // setDailyWord sets the word at 12 midnight IST daily
+    @Scheduled(cron = "0 0 0 * * *", zone = "Asia/Kolkata")
     public void setDailyWord() {
         Random rand = new Random();
         int wordCount = wordsDao.getWordCount();
@@ -88,9 +89,11 @@ public class NewordleService {
         }
         // int a = enteredWordMap.get('a').stream().map().collect(Collectors.toList());
 
-        // dailyMap contains all non green character positions only
-        // res contains all green characters
-        // now computing yellow and grey
+        /*
+         * dailyMap contains all non green character positions only
+         * res contains all green characters
+         * now computing yellow and grey
+         */
         for (int i = 0; i < 5; i++) {
             if (res[i] == 0) {
                 char c = enteredWord.charAt(i);
@@ -136,14 +139,17 @@ public class NewordleService {
         if (word.length() != 5) {
             return "Word Length not 5";
         }
+
         wordSet = wordsDao.getAllWords();
         if (wordSet.contains(word)) {
             return "Word already in the DB";
         }
+
         String insert = wordsDao.insertOneWord(word);
         if (insert == "Error Inserting") {
             return "Error Inserting";
         }
+
         wordSet.add(word);
         return "Successfully Inserted word - " + word;
 
