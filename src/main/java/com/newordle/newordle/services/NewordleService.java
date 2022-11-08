@@ -5,11 +5,14 @@ import java.io.FileNotFoundException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.newordle.newordle.dao.WordsDao;
 import com.newordle.newordle.model.WordsDb;
 
+@EnableScheduling
 @Service
 public class NewordleService {
     static String dailyWord;
@@ -41,6 +44,7 @@ public class NewordleService {
      * Method to generate and set the daily word
      * Has to be set as a cron job
      */
+    @Scheduled(cron = "0 0 0 * * *", zone = "Asia/Kolkata")
     public void setDailyWord() {
         Random rand = new Random();
         int wordCount = wordsDao.getWordCount();
