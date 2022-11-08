@@ -40,10 +40,7 @@ public class NewordleService {
 
     }
 
-    /*
-     * Method to generate and set the daily word
-     * Has to be set as a cron job
-     */
+    // setDailyWord sets the word at 12 midnight IST daily
     @Scheduled(cron = "0 0 0 * * *", zone = "Asia/Kolkata")
     public void setDailyWord() {
         Random rand = new Random();
