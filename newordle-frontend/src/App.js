@@ -1,33 +1,30 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import WordGrid from './components/WordGrid';
 
 class App extends Component {
 
   state = {};
 
-  componentDidMount() {
-    this.frontendCheck()
-  }
+  // componentDidMount() {
+  //   this.frontendCheck()
+  // }
 
-  frontendCheck = () => {
-    fetch('/frontend')
-      .then(response => response.text())
-      .then(message => {
-        this.setState({ message: message });
-      });
-  };
+  // frontendCheck = () => {
+  //   fetch('/frontend')
+  //     .then(response => response.text())
+  //     .then(message => {
+  //       this.setState({ message: message });
+  //     });
+  // };
 
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h3 className="App-title">{this.state.message}</h3>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+      <div className="App bg-dark">
+        <div>
+          <h2 className="App-title" style={{ color: "white"}}>Newordle</h2>
+          <WordGrid />
+        </div>
       </div>
     );
   }
