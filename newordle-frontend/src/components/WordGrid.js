@@ -4,26 +4,36 @@ import WordRow from "./WordRow";
 function WordGrid() {
     const [curRow, setCurRow] = useState(1);
     const [word, setWord] = useState("");
+    const [resp, setResp] = useState("");
 
     useEffect(() => {
         if (validateWord(word)) {
             setCurRow(row => row + 1);
         }
-    }, [word])
+        setResp("")
+    }, [resp])
 
-    const validateWord = (wordPassed) => {
+    async function getWordValidation() {
         if (word.length === 5) {
-            var check = "";
-            fetch(`http://localhost:8080/newordle?queryParam=${wordPassed}`)
+            await fetch(`http://localhost:8080/newordle?queryParam=${word}`)
                 .then(response => response.text())
                 .then((response) => {
-                    check = response;
+                    setResp(response);
                     console.log(response);
                 }, (error) => {
                     console.log(error);
                 });
+        }
+    }
+
+    useEffect(() => {
+        getWordValidation();
+    }, [word])
+
+    const validateWord = (wordPassed) => {
+        if (word.length === 5) {
             console.log("Validating:", wordPassed);
-            if (check === "" || check === "Invalid Word!") {
+            if (resp === "" || resp === "Invalid Word!") {
                 return false;
             }
             return true;
