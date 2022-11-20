@@ -44,20 +44,25 @@ function WordRow(props) {
                     setKey("");
                     setCell(prevCell => prevCell - 1);
                     setWord(prevWord => prevWord.slice(0, -1));
-                } else if (e.key === 'Enter' && word.length === 5) {
-                    console.log(word); //check word
+                } else if (e.key === 'Enter') {
+                    if (word.length === 5) {
+                        console.log("=====Word Entered=====", props.rowId, word);
+                        props.updateWord(word);
+                    } else {
+                        console.log("=====Invalid Input=====");
+                    }
                 } else {
-                    console.log("invalid input");
+                    console.log("=====Invalid Input=====");
                 }
+                console.log(e.key, word.length, props.active);
             }
         }
         document.addEventListener('keyup', detectKeyUp, false)
         return () => document.removeEventListener("keyup", detectKeyUp);
     }, [props.active, word]);
 
-
     return (
-        <Row style={{ height: '5rem', justifyContent: 'center' }} >
+        <Row style={{ height: '5rem', justifyContent: 'center' }}>
             <Cell active={props.displayed && cell.valueOf() >= 1} text={letter1} />
             <Cell active={props.displayed && cell.valueOf() >= 2} text={letter2} />
             <Cell active={props.displayed && cell.valueOf() >= 3} text={letter3} />
