@@ -37,7 +37,7 @@ function WordRow(props) {
         const detectKeyUp = (e) => {
             if (props.active) {
                 if (word.length < 5 && new RegExp('^[a-zA-Z]$').test(e.key)) {
-                    setKey(e.key); //a-z
+                    setKey(e.key.toUpperCase()); //a-z
                     setCell(prevCell => prevCell + 1);
                     setWord(prevWord => prevWord + e.key);
                 } else if (e.key === 'Backspace' && word.length > 0) {
@@ -63,11 +63,11 @@ function WordRow(props) {
 
     return (
         <Row style={{ height: '5rem', justifyContent: 'center' }}>
-            <Cell active={props.displayed && cell.valueOf() >= 1} text={letter1} />
-            <Cell active={props.displayed && cell.valueOf() >= 2} text={letter2} />
-            <Cell active={props.displayed && cell.valueOf() >= 3} text={letter3} />
-            <Cell active={props.displayed && cell.valueOf() >= 4} text={letter4} />
-            <Cell active={props.displayed && cell.valueOf() >= 5} text={letter5} />
+            <Cell active={props.displayed && cell.valueOf() >= 1} text={letter1} background={props.colors[0]} />
+            <Cell active={props.displayed && cell.valueOf() >= 2} text={letter2} background={props.colors[1]} />
+            <Cell active={props.displayed && cell.valueOf() >= 3} text={letter3} background={props.colors[2]} />
+            <Cell active={props.displayed && cell.valueOf() >= 4} text={letter4} background={props.colors[3]} />
+            <Cell active={props.displayed && cell.valueOf() >= 5} text={letter5} background={props.colors[4]} />
             <p style={{ color: 'red' }}>{word}</p>
         </Row>
     )
