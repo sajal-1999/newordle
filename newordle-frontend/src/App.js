@@ -22,7 +22,9 @@ class App extends Component {
     return (
       <div className="App bg-dark">
         <div>
-          <h2 className="App-title" style={{ color: "white"}}>Newordle</h2>
+          <br></br>
+          <h1 className="App-title" style={{ color: "white" }}>Newordle</h1>
+          <br></br>
           <WordGrid />
         </div>
       </div>
