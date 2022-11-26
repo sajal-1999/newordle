@@ -54,13 +54,14 @@ public class Controller {
         String ret = "";
         for (int i = 0; i < 5; i++) {
             if (res[i] == 0) {
-                ret = ret + "Grey";
+                ret = ret + "Grey,";
             } else if (res[i] == 1) {
-                ret = ret + "Yellow";
+                ret = ret + "Yellow,";
             } else {
-                ret = ret + "Green";
+                ret = ret + "Green,";
             }
         }
+        ret = ret.substring(0, ret.length() - 1);
         return ret;
     }
 
