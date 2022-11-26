@@ -2,7 +2,7 @@ import { Card } from 'react-bootstrap';
 
 function Cell(props) {
     var letter = '';
-    if(letter==='') {
+    if (letter === '') {
         letter = props.active ? props.text : '';
     }
     // console.log(props.rowid + "---" + props.cell  + "---" + props.active + "---" + letter);
@@ -10,11 +10,18 @@ function Cell(props) {
     return <Card
         className='.bg-dark'
         style={{
-            width: '2rem',
-            height: '2rem',
-            margin: '5px' }}
+            width: '3rem',
+            height: '3rem',
+            margin: '5px',
+            color: 'black',
+            background: props.background,
+            border: `2px solid white`,
+            justifyContent: 'center'
+        }}
     >
-        {props.active ? props.text : ''}
+        <b>
+            {props.active ? props.text : ''}
+        </b>
     </Card>;
 }
 
