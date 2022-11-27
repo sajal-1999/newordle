@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.newordle.newordle.services.NewordleService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @RequestMapping("")
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 public class Controller {
 
     @Autowired
@@ -44,6 +46,7 @@ public class Controller {
      */
     @GetMapping("/newordle")
     public String newordle(@RequestParam String queryParam) {
+        queryParam = queryParam.strip().toLowerCase();
         if (!service.validateEnteredWord(queryParam)) {
             return "Invalid Word!";
         }
@@ -51,13 +54,14 @@ public class Controller {
         String ret = "";
         for (int i = 0; i < 5; i++) {
             if (res[i] == 0) {
-                ret = ret + "Grey";
+                ret = ret + "Grey,";
             } else if (res[i] == 1) {
-                ret = ret + "Yellow";
+                ret = ret + "Yellow,";
             } else {
-                ret = ret + "Green";
+                ret = ret + "Green,";
             }
         }
+        ret = ret.substring(0, ret.length() - 1);
         return ret;
     }
 

@@ -37,32 +37,37 @@ function WordRow(props) {
         const detectKeyUp = (e) => {
             if (props.active) {
                 if (word.length < 5 && new RegExp('^[a-zA-Z]$').test(e.key)) {
-                    setKey(e.key); //a-z
+                    setKey(e.key.toUpperCase()); //a-z
                     setCell(prevCell => prevCell + 1);
                     setWord(prevWord => prevWord + e.key);
                 } else if (e.key === 'Backspace' && word.length > 0) {
                     setKey("");
                     setCell(prevCell => prevCell - 1);
                     setWord(prevWord => prevWord.slice(0, -1));
-                } else if (e.key === 'Enter' && word.length === 5) {
-                    console.log(word); //check word
+                } else if (e.key === 'Enter') {
+                    if (word.length === 5) {
+                        console.log("=====Word Entered=====", props.rowId, word);
+                        props.updateWord(word);
+                    } else {
+                        console.log("=====Invalid Input=====");
+                    }
                 } else {
-                    console.log("invalid input");
+                    console.log("=====Invalid Input=====");
                 }
+                console.log(e.key, word.length, props.active);
             }
         }
         document.addEventListener('keyup', detectKeyUp, false)
         return () => document.removeEventListener("keyup", detectKeyUp);
     }, [props.active, word]);
 
-
     return (
-        <Row style={{ height: '5rem', justifyContent: 'center' }} >
-            <Cell active={props.displayed && cell.valueOf() >= 1} text={letter1} />
-            <Cell active={props.displayed && cell.valueOf() >= 2} text={letter2} />
-            <Cell active={props.displayed && cell.valueOf() >= 3} text={letter3} />
-            <Cell active={props.displayed && cell.valueOf() >= 4} text={letter4} />
-            <Cell active={props.displayed && cell.valueOf() >= 5} text={letter5} />
+        <Row style={{ height: '5rem', justifyContent: 'center' }}>
+            <Cell active={props.displayed && cell.valueOf() >= 1} text={letter1} background={props.colors[0]} />
+            <Cell active={props.displayed && cell.valueOf() >= 2} text={letter2} background={props.colors[1]} />
+            <Cell active={props.displayed && cell.valueOf() >= 3} text={letter3} background={props.colors[2]} />
+            <Cell active={props.displayed && cell.valueOf() >= 4} text={letter4} background={props.colors[3]} />
+            <Cell active={props.displayed && cell.valueOf() >= 5} text={letter5} background={props.colors[4]} />
             <p style={{ color: 'red' }}>{word}</p>
         </Row>
     )
