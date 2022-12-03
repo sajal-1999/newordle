@@ -33,3 +33,6 @@ build/
 ### VS Code ###
 .vscode/
 /node_modules
+
+### My own notes ###
+readme.txt
