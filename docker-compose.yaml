@@ -1,16 +1,28 @@
+version: "3"
 services:
   backend:
     build:
+      context: ./
       dockerfile: Dockerfile
     ports:
       - 8080:8080
-    environment:
-      MONGODB_URL: value
   frontend:
     build:
       context: newordle-frontend
       dockerfile: Dockerfile
     ports:
-      - 80:3000
+      - 3000:3000
     depends_on:
       - backend
+    volumes:
+      - webdata:/app/build/
+  web-server:
+    image: nginx:1.23.2-alpine
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./nginx/conf/:/etc/nginx/conf.d/:ro
+      - webdata:/usr/share/nginx/html/:ro
+volumes:
+  webdata:

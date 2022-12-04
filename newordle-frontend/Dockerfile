@@ -1,9 +1,12 @@
 FROM node:19-alpine3.16
 
-# COPY package.json package-lock.json .
+WORKDIR /app
 
-# RUN npm install
+COPY package.json .
 
-COPY . .
+RUN npm install
 
+COPY . ./
+
+RUN npm run build
 ENTRYPOINT [ "npm", "start" ]
