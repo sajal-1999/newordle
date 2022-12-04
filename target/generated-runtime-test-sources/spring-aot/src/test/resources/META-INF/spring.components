@@ -1,0 +1,5 @@
+#
+#Sun Dec 04 12:07:00 IST 2022
+com.newordle.newordle.NewordleApplication=org.springframework.stereotype.Component,org.springframework.boot.SpringBootConfiguration
+com.newordle.newordle.controllers.Controller=org.springframework.stereotype.Component
+com.newordle.newordle.services.NewordleService=org.springframework.stereotype.Component
