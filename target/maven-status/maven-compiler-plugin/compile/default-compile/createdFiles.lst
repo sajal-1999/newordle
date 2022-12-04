@@ -1,0 +1,5 @@
+com\newordle\newordle\dao\WordsDao.class
+com\newordle\newordle\NewordleApplication.class
+com\newordle\newordle\controllers\Controller.class
+com\newordle\newordle\services\NewordleService.class
+com\newordle\newordle\model\WordsDb.class
