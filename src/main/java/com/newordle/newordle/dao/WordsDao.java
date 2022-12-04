@@ -59,6 +59,39 @@ public class WordsDao {
         mongoClient.close();
     }
 
+    // getDailyWord
+    public String getDailyWord() {
+        try {
+            MongoCollection<Document> collection = getDbCollection();
+            Document dailyWordDoc = collection.find(Filters.eq("_id", 0)).first();
+            if (dailyWordDoc == null) {
+                return null;
+            }
+            return (String) dailyWordDoc.get("word");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            terminateConnection();
+        }
+    }
+
+    // updateDailyWordDb
+    public void updateDailyWordDb(String dailyWord) {
+        try {
+            MongoCollection<Document> collection = getDbCollection();
+            Bson update = set("word", dailyWord);
+            Document dailyWordDoc = collection.findOneAndUpdate(Filters.eq("_id", 0), update);
+            if (dailyWordDoc == null) {
+                System.err.println("Failed to update daily word in DB!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            terminateConnection();
+        }
+    }
+
     // findWord returns the document corresponding to the _id passed as POJO
     public WordsDb findWordById(int _id) {
         try {
