@@ -35,6 +35,8 @@ public class NewordleService {
         dailyWord = wordsDao.getDailyWord();
         if (dailyWord == null) {
             setDailyWord();
+        } else {
+            updateDaiyWordMap();
         }
     }
 
@@ -59,7 +61,10 @@ public class NewordleService {
         wordsDao.updateDailyWordDb(dailyWord);
         System.out.println("\n\n============XXXXX=============\n\n");
         System.out.println(dailyWord + " " + dailyWordIndex + "\n=====================");
+        updateDaiyWordMap();
+    }
 
+    private void updateDaiyWordMap() {
         // Creating char map for dailyWord
         for (int i = 0; i < 5; i++) {
             char c = dailyWord.charAt(i);
