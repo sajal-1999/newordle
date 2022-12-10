@@ -27,17 +27,17 @@ public class NewordleService {
         if (wordSet == null) {
             System.err.println("ERROR: Wordset not created");
         }
-        setDailyWord();
+        getDailyWord();
+    }
 
-        // Creating char map for dailyWord
-        for (int i = 0; i < 5; i++) {
-            char c = dailyWord.charAt(i);
-            if (!dailyMap.containsKey(c)) {
-                dailyMap.put(c, new ArrayList<>());
-            }
-            dailyMap.get(c).add(i);
+    //
+    private void getDailyWord() {
+        dailyWord = wordsDao.getDailyWord();
+        if (dailyWord == null) {
+            setDailyWord();
+        } else {
+            updateDailyWordMap();
         }
-
     }
 
     // setDailyWord sets the word at 12 midnight IST daily
@@ -58,8 +58,22 @@ public class NewordleService {
 
         dailyWord = wordObj.getWord();
         wordsDao.setUsed(dailyWordIndex);
+        wordsDao.updateDailyWordDb(dailyWord);
         System.out.println("\n\n============XXXXX=============\n\n");
         System.out.println(dailyWord + " " + dailyWordIndex + "\n=====================");
+        updateDailyWordMap();
+    }
+
+    private void updateDailyWordMap() {
+        // Creating char map for dailyWord
+        dailyMap.clear();
+        for (int i = 0; i < 5; i++) {
+            char c = dailyWord.charAt(i);
+            if (!dailyMap.containsKey(c)) {
+                dailyMap.put(c, new ArrayList<>());
+            }
+            dailyMap.get(c).add(i);
+        }
     }
 
     // validateEnteredWord checks if the entered word is actually a word or not
