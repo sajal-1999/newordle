@@ -12,6 +12,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
+
+// import javax.ws.rs.core.MediaType;
+// import javax.ws.rs.core.Response;
 
 @RequestMapping("")
 @RestController
@@ -39,16 +44,11 @@ public class Controller {
     // }
 
     // curl-X GET localhost:8080/newordle?queryParam=madam
-    /*
-     * --------TO DO--------
-     * Find better name
-     * Response Codes update
-     */
     @GetMapping("/newordle")
-    public String newordle(@RequestParam String queryParam) {
+    public ResponseEntity<String> newordle(@RequestParam String queryParam) {
         queryParam = queryParam.strip().toLowerCase();
         if (!service.validateEnteredWord(queryParam)) {
-            return "Invalid Word!";
+            return new ResponseEntity<>("Invalid Word!", HttpStatus.OK);
         }
         int[] res = service.getResult(queryParam);
         String ret = "";
@@ -62,7 +62,8 @@ public class Controller {
             }
         }
         ret = ret.substring(0, ret.length() - 1);
-        return ret;
+        System.out.println(new ResponseEntity<>(ret, HttpStatus.OK));
+        return new ResponseEntity<>(ret, HttpStatus.OK);
     }
 
     // API to insert one new word
