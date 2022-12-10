@@ -22,7 +22,7 @@ function WordGrid() {
 
     async function getWordValidation() {
         if (word.length === 5) {
-            await fetch(`http://localhost:8080/newordle?queryParam=${word}`)
+            await fetch(`/newordle?queryParam=${word}`)
                 .then(response => response.text())
                 .then((response) => {
                     setResp(response);
