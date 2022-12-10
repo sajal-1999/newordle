@@ -1,4 +1,4 @@
-FROM node:19-alpine3.16
+FROM node:19-alpine3.16 as BUILD
 
 WORKDIR /app
 
@@ -9,4 +9,13 @@ RUN npm install
 COPY . ./
 
 RUN npm run build
-ENTRYPOINT [ "npm", "start" ]
+
+FROM nginx:1.23.2-alpine 
+
+COPY --from=BUILD /app/build /usr/share/nginx/html/
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
+
+#ENTRYPOINT [ "npm", "start" ]

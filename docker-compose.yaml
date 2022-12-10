@@ -11,18 +11,29 @@ services:
       context: newordle-frontend
       dockerfile: Dockerfile
     ports:
-      - 3000:3000
+      - 80:80
+      - 443:443
     depends_on:
       - backend
     volumes:
-      - webdata:/app/build/
-  web-server:
-    image: nginx:1.23.2-alpine
-    ports:
-      - 80:80
-      - 443:443
-    volumes:
       - ./nginx/conf/:/etc/nginx/conf.d/:ro
-      - webdata:/usr/share/nginx/html/:ro
-volumes:
-  webdata:
+      - ./certbot/www/:/var/www/certbot/:ro
+      - ./certbot/conf/:/etc/letsencrypt/:ro
+  ssl-service: 
+    image: certbot/certbot:v2.1.0 
+    volumes: 
+      - ./certbot/www/:/var/www/certbot/:rw
+      - ./certbot/conf/:/etc/letsencrypt/:rw
+    depends_on: 
+      - frontend 
+    command: 
+      - renew
+      #- certonly 
+      #- --webroot
+      #- -w
+      #- /var/www/certbot/
+      #- --email=sajal52@gmail.com 
+      #- --agree-tos 
+      #- --no-eff-email 
+      #- -d
+      #- newordle.com
