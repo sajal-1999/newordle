@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import WordRow from "./WordRow";
+import KeyboardComp from './Keyboard';
 
 function WordGrid() {
     const [curRow, setCurRow] = useState(1);
@@ -18,6 +19,7 @@ function WordGrid() {
         }
         setResp("");
         setWord("");
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [resp])
 
     async function getWordValidation() {
@@ -35,6 +37,7 @@ function WordGrid() {
 
     useEffect(() => {
         getWordValidation();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [word])
 
     const validateWord = (wordPassed) => {
@@ -55,6 +58,8 @@ function WordGrid() {
         <WordRow active={curRow.valueOf() === 4} displayed={curRow.valueOf() >= 4} updateWord={setWord} rowId={4} colors={colors[3]} />
         <WordRow active={curRow.valueOf() === 5} displayed={curRow.valueOf() >= 5} updateWord={setWord} rowId={5} colors={colors[4]} />
         <WordRow active={curRow.valueOf() === 6} displayed={curRow.valueOf() >= 6} updateWord={setWord} rowId={6} colors={colors[5]} />
+        
+        <KeyboardComp />
     </div>
 }
 
