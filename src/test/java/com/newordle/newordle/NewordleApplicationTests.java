@@ -1,18 +1,51 @@
 package com.newordle.newordle;
 
-import com.newordle.newordle.controllers.Controller;
+import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.stereotype.Service;
 
-@SpringBootTest
+import com.newordle.newordle.dao.WordsDao;
+import com.newordle.newordle.services.NewordleService;
+
+@EnableScheduling
+@Service
 class NewordleApplicationTests {
-	@Test
-	void contextLoads() {
-		// Controller controller = new Controller();
-		// assertEquals("GreenGreenGreenGreenGreen", controller.newordle("madam"));
-		// assertEquals("GreenGreenYellowGreyYellow", controller.newordle("mamma"));
-	}
+	// @Mock
+	// WordsDao wordsDao;
+
+	// @Test
+	// public void testValidateEnteredWord() {
+	// Set<String> wordSet = Set.of("hello", "green", "world");
+	// NewordleService newordleService = new NewordleService(wordSet, "hello",
+	// wordsDao);
+
+	// newordleService.validateEnteredWord("green");
+	// }
+
+	// @Test
+	// public void testInsertOneWord() {
+	// Set<String> wordSet = Set.of("hello", "green", "world");
+	// NewordleService newordleService = new NewordleService(wordSet, "hello",
+	// wordsDao);
+	// System.out.println(wordSet);
+	// Assertions.assertEquals(newordleService.insertOneWord(null),"WordLength not
+	// 5");
+	// Mockito.when(wordsDao.getAllWords()).thenReturn(wordSet);
+	// Assertions.assertEquals(newordleService.insertOneWord("abc"), "Word Length
+	// not 5");
+
+	// Mockito.when(wordsDao.getAllWords()).thenReturn(wordSet);
+	// Assertions.assertEquals(newordleService.insertOneWord("hello"), "Word already
+	// in the DB");
+
+	// Mockito.when(wordsDao.insertOneWord("steal")).thenReturn("steal");
+	// Assertions.assertEquals(newordleService.insertOneWord("steal"), "Successfully
+	// Inserted word - steal");
+	// wordSet = newordleService.getWordSet....
+	// }
 }
