@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -30,13 +32,24 @@ public class NewordleService {
         getDailyWord();
     }
 
-    //
+    // NewordleService constructor for test cases
+    public NewordleService(Set<String> words, String curWord, WordsDao wordsDao) {
+        wordSet = words;
+        dailyWord = curWord;
+        this.wordsDao = wordsDao;
+    }
+
+    @PostConstruct
+    void init() {
+        // Creating char map for dailyWord
+        updateDailyWordMap();
+    }
+
+    // getDailyWord() fetches the daily word from DB
     private void getDailyWord() {
         dailyWord = wordsDao.getDailyWord();
         if (dailyWord == null) {
             setDailyWord();
-        } else {
-            updateDailyWordMap();
         }
     }
 
@@ -61,11 +74,10 @@ public class NewordleService {
         wordsDao.updateDailyWordDb(dailyWord);
         System.out.println("\n\n============XXXXX=============\n\n");
         System.out.println(dailyWord + " " + dailyWordIndex + "\n=====================");
-        updateDailyWordMap();
     }
 
+    // updateDailyWordMap() creates char map for dailyWord
     private void updateDailyWordMap() {
-        // Creating char map for dailyWord
         dailyMap.clear();
         for (int i = 0; i < 5; i++) {
             char c = dailyWord.charAt(i);
@@ -76,7 +88,7 @@ public class NewordleService {
         }
     }
 
-    // validateEnteredWord checks if the entered word is actually a word or not
+    // validateEnteredWord() checks if the entered word is actually a word or not
     public Boolean validateEnteredWord(String enteredWord) {
         if (wordSet.contains(enteredWord)) {
             return true;
@@ -84,7 +96,7 @@ public class NewordleService {
         return false;
     }
 
-    // getResult checks the entered word against the daily word
+    // getResult() checks the entered word against the daily word
     public int[] getResult(String enteredWord) {
         Map<Character, List<Integer>> dailyMapCopy = new HashMap<>();
         dailyMapCopy = dailyMap
@@ -122,7 +134,7 @@ public class NewordleService {
         return res;
     }
 
-    // insertAllWords adds words for first time to mongoDB collection
+    // insertAllWords() adds words for first time to mongoDB collection
     public void insertAllWords() {
         if (wordsDao.getWordCount() == 0) {
             System.out.println("DB Already has words!");
@@ -147,7 +159,7 @@ public class NewordleService {
         }
     }
 
-    // insertOneWord is used to add a new word to the db
+    // insertOneWord() is used to add a new word to the db
     public String insertOneWord(String word) {
         word = word.strip().toLowerCase();
         if (word.length() != 5) {
@@ -155,7 +167,10 @@ public class NewordleService {
         }
 
         wordSet = wordsDao.getAllWords();
-        if (wordSet.contains(word)) {
+        if (wordSet.isEmpty()) {
+            System.out.println("Empty wordset");
+            return "Empty Wordset";
+        } else if (wordSet.contains(word)) {
             return "Word already in the DB";
         }
 
