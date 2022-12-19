@@ -31,7 +31,7 @@ function KeyboardComp() {
             layout={layout}
             theme={"hg-theme-default myTheme1"}
             onKeyPress={onPress}
-            display={{ '{enter}': 'Enter', '{bksp}': 'Backspace' }}
+            display={{ '{enter}': '⏎', '{bksp}': '⌫' }}
 
         />
     </div>
