@@ -1,23 +1,9 @@
 import React, { Component } from 'react';
 import './App.css';
 import WordGrid from './components/WordGrid';
+import KeyboardComp from './components/Keyboard';
 
 class App extends Component {
-
-  state = {};
-
-  // componentDidMount() {
-  //   this.frontendCheck()
-  // }
-
-  // frontendCheck = () => {
-  //   fetch('/frontend')
-  //     .then(response => response.text())
-  //     .then(message => {
-  //       this.setState({ message: message });
-  //     });
-  // };
-
   render() {
     return (
       <div className="App bg-dark">
@@ -26,6 +12,7 @@ class App extends Component {
           <h1 className="App-title" style={{ color: "white" }}>Newordle</h1>
           <br></br>
           <WordGrid />
+          <KeyboardComp />
         </div>
       </div>
     );

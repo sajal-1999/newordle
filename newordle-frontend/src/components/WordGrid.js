@@ -18,6 +18,7 @@ function WordGrid() {
         }
         setResp("");
         setWord("");
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [resp])
 
     async function getWordValidation() {
@@ -35,6 +36,7 @@ function WordGrid() {
 
     useEffect(() => {
         getWordValidation();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [word])
 
     const validateWord = (wordPassed) => {
