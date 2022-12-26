@@ -37,9 +37,10 @@ public class NewordleService {
         wordSet = words;
         dailyWord = curWord;
         this.wordsDao = wordsDao;
+        updateDailyWordMap();
     }
 
-    @PostConstruct
+    // @PostConstruct
     void init() {
         // Creating char map for dailyWord
         updateDailyWordMap();
@@ -50,6 +51,8 @@ public class NewordleService {
         dailyWord = wordsDao.getDailyWord();
         if (dailyWord == null) {
             setDailyWord();
+        } else {
+            updateDailyWordMap();
         }
     }
 
@@ -74,6 +77,7 @@ public class NewordleService {
         wordsDao.updateDailyWordDb(dailyWord);
         System.out.println("\n\n============XXXXX=============\n\n");
         System.out.println(dailyWord + " " + dailyWordIndex + "\n=====================");
+        updateDailyWordMap();
     }
 
     // updateDailyWordMap() creates char map for dailyWord
