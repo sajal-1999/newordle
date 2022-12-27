@@ -1,9 +1,16 @@
 import React, { Component } from 'react';
 import './App.css';
 import WordGrid from './components/WordGrid';
-import KeyboardComp from './components/Keyboard';
+import Keyboard from './components/Keyboard';
 
 class App extends Component {
+  state = { letterColors: [], word: '' }
+  getColorResponse = (word, letterColors) => {
+    this.setState({
+      word: word,
+      letterColors: letterColors
+    })
+  }
   render() {
     return (
       <div className="App bg-dark">
@@ -11,8 +18,8 @@ class App extends Component {
           <br></br>
           <h1 className="App-title" style={{ color: "white" }}>Newordle</h1>
           <br></br>
-          <WordGrid />
-          <KeyboardComp />
+          <WordGrid getColorResponse={this.getColorResponse} />
+          <Keyboard word={this.state.word} letterColors={this.state.letterColors} />
         </div>
       </div>
     );

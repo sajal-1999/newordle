@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import WordRow from "./WordRow";
 
-function WordGrid() {
+function WordGrid(props) {
     const [curRow, setCurRow] = useState(1);
     const [word, setWord] = useState("");
     const [resp, setResp] = useState("");
@@ -15,6 +15,7 @@ function WordGrid() {
             var curRowColors = colors;
             curRowColors[curRow - 1] = temp;
             setColors(curRowColors);
+            props.getColorResponse(word, curRowColors);
         }
         setResp("");
         setWord("");
